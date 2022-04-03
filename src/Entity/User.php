@@ -18,9 +18,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'get',
         'register' => [
             'method' => 'POST',
-            'path' => '/users/register',
+            'path' => '/register',
             'controller' => RegistrationController::class,
             'read' => false,
+            'denormalization_context' => ['groups' => ['register']],
         ],
     ],
     normalizationContext: ['groups' => ['read']],
@@ -39,7 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Groups(['read'])]
+    #[Groups(['read', 'register'])]
     private string $email;
 
     #[ORM\Column(type: 'json')]
@@ -47,6 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(type: 'string')]
+    #[Groups(['register'])]
     private string $password;
 
     public function getId(): ?int
