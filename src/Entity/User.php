@@ -2,32 +2,48 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\RegistrationController;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiResource(
     collectionOperations: ['get'],
-    itemOperations: ['get'],
+    itemOperations: [
+        'get',
+        'register' => [
+            'method' => 'POST',
+            'path' => '/users/register',
+            'controller' => RegistrationController::class,
+            'read' => false,
+        ],
+    ],
+    normalizationContext: ['groups' => ['read']],
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
+    const ROLE_USER = 'user';
     const ROLE_ADMIN = 'admin';
     const ROLE_SUPER_ADMIN = 'super_admin';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Groups(['read'])]
     private string $email;
 
     #[ORM\Column(type: 'json')]
+    #[Groups(['read'])]
     private array $roles = [];
 
     #[ORM\Column(type: 'string')]
@@ -67,7 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = User::ROLE_USER;
 
         return array_unique($roles);
     }
@@ -99,7 +115,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Don't store password in plain text inside User object!
     }
 }

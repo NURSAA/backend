@@ -2,23 +2,25 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Service\SecurityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
-#[Route(path: '/register', name: 'api_register')]
+#[AsController]
 class RegistrationController extends AbstractController
 {
+    private SecurityManager $securityManager;
 
-    #[Route(path: '', name: 'api_register', methods: ['POST'])]
-    public function register(Request $request, SecurityManager $securityManager): JsonResponse
+    public function __construct(SecurityManager $securityManager)
+    {
+        $this->securityManager = $securityManager;
+    }
+
+    public function __invoke(Request $request): User
     {
         $content = json_decode($request->getContent(), true);
-        $securityManager->registerUser($content['email'], $content['password']);
-
-        return new JsonResponse();
+        return $this->securityManager->registerUser($content['email'], $content['password']);
     }
 }
