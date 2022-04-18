@@ -3,17 +3,19 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 
 abstract class AbstractEntity
 {
-    #[Gedmo\Timestampable(on: "create")]
-    #[ORM\Column(type: "datetime")]
+
+    #[Gedmo\Timestampable(on: 'create')]
+    #[ORM\Column(name: 'created', type: Types::DATETIME_MUTABLE)]
     protected DateTime $created;
 
-    #[Gedmo\Timestampable(on: "update")]
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(name: 'updated', type: Types::DATETIME_MUTABLE)]
+    #[Gedmo\Timestampable]
     protected DateTime $updated;
 }
