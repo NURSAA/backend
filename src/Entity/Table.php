@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\TableRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TableRepository::class)]
 #[ORM\Table(name: '`table`')]
@@ -14,12 +15,15 @@ class Table
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups('floor:read')]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups('floor:read')]
     private string $name;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups('floor:read')]
     private int $seats;
 
     #[ORM\ManyToOne(targetEntity: Floor::class, inversedBy: 'tables')]
