@@ -27,6 +27,9 @@ class Floor
     #[ORM\OneToMany(mappedBy: 'floor', targetEntity: Table::class, orphanRemoval: true)]
     private Collection $tables;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $name;
+
     public function __construct()
     {
         $this->tables = new ArrayCollection();
@@ -87,6 +90,18 @@ class Floor
                 $table->setFloor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
