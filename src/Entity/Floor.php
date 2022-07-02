@@ -25,7 +25,7 @@ class Floor
     private int $level;
 
     #[ORM\OneToMany(mappedBy: 'floor', targetEntity: Table::class, orphanRemoval: true)]
-    private ArrayCollection $tables;
+    private Collection $tables;
 
     public function __construct()
     {

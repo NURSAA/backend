@@ -25,7 +25,10 @@ class Restaurant extends AbstractEntity
     private string $url;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Floor::class, orphanRemoval: true)]
-    private ArrayCollection $floors;
+    private Collection $floors;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $description;
 
     public function __construct()
     {
@@ -73,6 +76,28 @@ class Restaurant extends AbstractEntity
                 $floor->setRestaurant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
