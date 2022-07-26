@@ -32,6 +32,10 @@ final class JwtDecorator implements OpenApiFactoryInterface
         $schemas['Token'] = new \ArrayObject([
             'type' => 'object',
             'properties' => [
+                '@id' => [
+                    'type' => 'string',
+                    'readOnly' => true,
+                ],
                 'id' => [
                     'type' => 'integer',
                     'readOnly' => true,
@@ -51,7 +55,7 @@ final class JwtDecorator implements OpenApiFactoryInterface
                     'type' => 'string',
                     'readOnly' => true,
                 ],
-            ],
+            ]
         ]);
         $schemas['Credentials'] = new \ArrayObject([
             'type' => 'object',
