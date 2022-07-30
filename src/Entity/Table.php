@@ -30,6 +30,10 @@ class Table
     #[ORM\JoinColumn(nullable: false)]
     private Floor $floor;
 
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'tables')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $tables;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -67,6 +71,18 @@ class Table
     public function setFloor(?Floor $floor): self
     {
         $this->floor = $floor;
+
+        return $this;
+    }
+
+    public function getTables(): ?Reservation
+    {
+        return $this->tables;
+    }
+
+    public function setTables(?Reservation $tables): self
+    {
+        $this->tables = $tables;
 
         return $this;
     }
