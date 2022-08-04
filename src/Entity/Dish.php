@@ -33,7 +33,7 @@ class Dish extends AbstractEntity
     private $order;
 
     #[ORM\OneToMany(mappedBy: 'MenuSection', targetEntity: MenuSection::class)]
-    private Section $section;
+    private MenuSection $section;
 
     public function __construct()
     {
