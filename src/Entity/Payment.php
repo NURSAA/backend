@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
+#[ORM\Table(name: 'payments')]
 #[ApiResource]
 class Payment
 {
@@ -17,7 +18,7 @@ class Payment
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\OneToMany(mappedBy: 'payment', targetEntity: Order::class)]
+    #[ORM\OneToOne(mappedBy: 'payment', targetEntity: Order::class)]
     private Order $orders;
 
     #[ORM\Column(type: 'float')]

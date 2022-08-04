@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: '`order`')]
+#[ORM\Table(name: '`orders`')]
 #[ApiResource]
 class Order
 {
@@ -25,7 +25,7 @@ class Order
     #[ORM\Column(type: 'string', length: 255)]
     private string $status;
 
-    #[ORM\ManyToOne(targetEntity: Payment::class, inversedBy: 'orders')]
+    #[ORM\OneToOne(inversedBy: 'orders', targetEntity: Payment::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Payment $payment;
 

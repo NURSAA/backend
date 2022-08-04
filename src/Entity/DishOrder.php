@@ -5,8 +5,10 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DishOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
 
 #[ORM\Entity(repositoryClass: DishOrderRepository::class)]
+#[ORM\Table(name: 'dish_orders')]
 #[ApiResource]
 class DishOrder
 {

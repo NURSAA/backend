@@ -4,12 +4,13 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ReservationRepository;
-use Cassandra\Date;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
+#[ORM\Table(name: 'reservations')]
 #[ApiResource]
 class Reservation
 {
@@ -30,10 +31,10 @@ class Reservation
     private Table $tables;
 
     #[ORM\Column(type: 'date')]
-    private Date $start;
+    private DateTime $start;
 
     #[ORM\Column(type: 'date')]
-    private Date $end;
+    private DateTime $end;
 
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Order::class)]
     private Collection $orders;
@@ -85,7 +86,7 @@ class Reservation
     {
         if (!$this->tables->contains($table)) {
             $this->tables[] = $table;
-            $table->setTables($this);
+            $table->setReservations($this);
         }
 
         return $this;
@@ -95,8 +96,8 @@ class Reservation
     {
         if ($this->tables->removeElement($table)) {
             // set the owning side to null (unless already changed)
-            if ($table->getTables() === $this) {
-                $table->setTables(null);
+            if ($table->getReservations() === $this) {
+                $table->setReservations(null);
             }
         }
 
