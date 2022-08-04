@@ -8,8 +8,9 @@ use App\Repository\MenuSectionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MenuSectionRepository::class)]
+#[ORM\Table(name: '`menu_sections`')]
 #[ApiResource]
-class MenuSection
+class MenuSection extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,7 +27,7 @@ class MenuSection
     private menu $menu;
 
     #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: MenuSection::class)]
-    private parentSection $parentSection;
+    private MenuSection $parentSection;
 
     #[ORM\Column(type: 'integer')]
     private $order;

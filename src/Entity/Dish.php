@@ -8,8 +8,9 @@ use App\Repository\DishRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DishRepository::class)]
+#[ORM\Table(name: '`dishes`')]
 #[ApiResource]
-class Dish
+class Dish extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,17 +23,17 @@ class Dish
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
 
-    #[ORM\Column(type: 'object', nullable: true)]
-    private object $image;
+    #[ORM\Column(type: 'File', nullable: true)]
+    private File $file;
 
-    #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: Ingredient::class)]
-    private ingredient $ingredient;
+    #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: Ingredient::class)]
+    private Ingredient $ingredient;
 
     #[ORM\Column(type: 'integer')]
     private $order;
 
-    #[ORM\OneToMany(mappedBy: 'menuSection', targetEntity: MenuSection::class)]
-    private section $section;
+    #[ORM\OneToMany(mappedBy: 'MenuSection', targetEntity: MenuSection::class)]
+    private Section $section;
 
     public function __construct()
     {
@@ -120,9 +121,6 @@ class Dish
         return $this;
     }
 
-    /**
-     * @return section|ArrayCollection
-     */
     public function getSection(): ArrayCollection|section
     {
         return $this->section;

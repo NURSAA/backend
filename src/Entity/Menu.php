@@ -8,8 +8,9 @@ use App\Repository\MenuRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
+#[ORM\Table(name: '`menus`')]
 #[ApiResource]
-class Menu
+class Menu extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -45,9 +46,6 @@ class Menu
         return $this;
     }
 
-    /**
-     * @return Collection<int, Restaurant>
-     */
     public function getRestaurants(): Collection
     {
         return $this->restaurant;
