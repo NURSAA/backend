@@ -21,7 +21,7 @@ class Menu extends AbstractEntity
     private string $name;
 
     #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: Restaurant::class)]
-    private restaurant $restaurant;
+    private Restaurant $restaurant;
 
 
     public function __construct()

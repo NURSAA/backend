@@ -24,7 +24,7 @@ class MenuSection extends AbstractEntity
     private string $description;
 
     #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: Menu::class)]
-    private menu $menu;
+    private Menu $menu;
 
     #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: MenuSection::class)]
     private MenuSection $parentSection;
