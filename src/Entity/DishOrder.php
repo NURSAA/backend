@@ -23,12 +23,16 @@ class DishOrder
     #[ORM\Column(type: 'float')]
     private float $price;
 
-    #[ORM\Column(type: 'boolean')]
-    private boolean $status;
+    #[ORM\Column(type: 'string')]
+    private string $status;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'dishOrders')]
     #[ORM\JoinColumn(nullable: false)]
     private Order $orders;
+
+    #[ORM\ManyToOne(targetEntity: Dish::class, inversedBy: 'dishOrders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Dish $dishes;
 
     public function getId(): ?int
     {
@@ -59,12 +63,12 @@ class DishOrder
         return $this;
     }
 
-    public function getStatus(): ?bool
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(bool $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
@@ -82,4 +86,15 @@ class DishOrder
 
         return $this;
     }
+
+    public function getDishes(): Dish
+    {
+        return $this->dishes;
+    }
+
+    public function setDishes(Dish $dishes): void
+    {
+        $this->dishes = $dishes;
+    }
 }
+

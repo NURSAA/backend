@@ -2,11 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use App\Repository\DishRepository;
-use Doctrine\ORM\Mapping as ORM;
-
 #[ORM\Entity(repositoryClass: DishRepository::class)]
 #[ORM\Table(name: '`dishes`')]
 #[ApiResource]
@@ -24,21 +19,22 @@ class Dish extends AbstractEntity
     private string $description;
 
     #[ORM\Column(type: 'File', nullable: true)]
-    private File $file;
+    private File $image;
 
     #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: Ingredient::class)]
-    private Ingredient $ingredient;
-
-    #[ORM\Column(type: 'integer')]
-    private $order;
+    private Collection $ingredient;
 
     #[ORM\OneToMany(mappedBy: 'MenuSection', targetEntity: MenuSection::class)]
-    private MenuSection $section;
+    private Collection $section;
+
+    #[ORM\OneToMany(mappedBy: 'dishes', targetEntity: DishOrder::class)]
+    private Collection $dishOrders;
 
     public function __construct()
     {
         $this->ingredient = new ArrayCollection();
         $this->section = new ArrayCollection();
+        $this->dishOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,34 +65,31 @@ class Dish extends AbstractEntity
         $this->description = $description;
     }
 
-    public function getImage()
+    public function getImage(): File
     {
         return $this->image;
     }
 
-    public function setImage($image): self
+    public function setImage(File $image): self
     {
         $this->image = $image;
 
         return $this;
     }
 
-
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-
-    public function setOrder($order): void
-    {
-        $this->order = $order;
-    }
-
-
     public function getIngredientGroup(): Collection
     {
         return $this->ingredient;
+    }
+
+    public function getDishOrders(): Collection
+    {
+        return $this->dishOrders;
+    }
+
+    public function setDishOrders(Collection $dishOrders): void
+    {
+        $this->dishOrders = $dishOrders;
     }
 
     public function addIngredientGroup(IngredientGroup $ingredient): self
@@ -147,4 +140,6 @@ class Dish extends AbstractEntity
 
         return $this;
     }
+
+
 }
