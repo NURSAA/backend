@@ -23,17 +23,17 @@ class Dish extends AbstractEntity
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
 
-    #[ORM\OneToOne(type: 'File', nullable: true, targetEntity: File::class)]
-    private File $file;
-
     #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: Ingredient::class)]
     private Ingredient $ingredient;
 
     #[ORM\Column(type: 'integer')]
-    private $order;
+    private int $order;
 
     #[ORM\OneToMany(mappedBy: 'MenuSection', targetEntity: MenuSection::class)]
     private MenuSection $section;
+
+    #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist', 'remove'])]
+    private File $file;
 
     public function __construct()
     {
@@ -144,6 +144,18 @@ class Dish extends AbstractEntity
                 $section->setIngredient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    public function setFile(?File $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }
