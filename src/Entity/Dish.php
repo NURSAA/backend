@@ -23,7 +23,7 @@ class Dish extends AbstractEntity
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
 
-    #[ORM\Column(type: 'File', nullable: true)]
+    #[ORM\OneToOne(type: 'File', nullable: true, targetEntity: File::class)]
     private File $file;
 
     #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: Ingredient::class)]
