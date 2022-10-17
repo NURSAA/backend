@@ -84,8 +84,6 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = User::ROLE_USER;
 
         return array_unique($roles);
     }
@@ -93,7 +91,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
+ 
         return $this;
     }
 
