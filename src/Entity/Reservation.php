@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ReservationRepository;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,13 +29,13 @@ class Reservation
     private Restaurant $restaurant;
 
     #[ORM\OneToMany(mappedBy: 'tables', targetEntity: Table::class)]
-    private Table $tables;
+    private Collection $tables;
 
     #[ORM\Column(type: 'date')]
-    private DateTime $start;
+    private DateTimeImmutable $start;
 
     #[ORM\Column(type: 'date')]
-    private DateTime $end;
+    private DateTimeImmutable $end;
 
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Order::class)]
     private Collection $orders;

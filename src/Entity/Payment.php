@@ -16,7 +16,7 @@ class Payment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\OneToOne(mappedBy: 'payment', targetEntity: Order::class)]
     private Order $orders;
@@ -29,7 +29,6 @@ class Payment
 
     public function __construct()
     {
-        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int

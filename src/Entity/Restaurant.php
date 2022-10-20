@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RestaurantRepository::class)]
-#[ORM\Table(name: '`restaurant`')]
+#[ORM\Table(name: '`restaurants`')]
 #[ApiResource]
 class Restaurant extends AbstractEntity
 {

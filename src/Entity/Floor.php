@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FloorRepository::class)]
+#[ORM\Table(name: '`floors`')]
 #[ApiResource(
     normalizationContext: [
         'groups' => ['floor:read'],

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TableRepository::class)]
-#[ORM\Table(name: '`table`')]
+#[ORM\Table(name: '`tables`')]
 #[ApiResource]
 class Table
 {
@@ -32,7 +32,7 @@ class Table
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'tables')]
     #[ORM\JoinColumn(nullable: false)]
-    private $tables;
+    private Reservation $reservation;
 
     public function getId(): ?int
     {
@@ -47,7 +47,6 @@ class Table
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -59,7 +58,6 @@ class Table
     public function setSeats(int $seats): self
     {
         $this->seats = $seats;
-
         return $this;
     }
 
@@ -71,19 +69,17 @@ class Table
     public function setFloor(?Floor $floor): self
     {
         $this->floor = $floor;
-
         return $this;
     }
 
-    public function getTables(): ?Reservation
+    public function getReservation(): ?Reservation
     {
-        return $this->tables;
+        return $this->reservation;
     }
 
-    public function setTables(?Reservation $tables): self
+    public function setReservation(?Reservation $reservation): self
     {
-        $this->tables = $tables;
-
+        $this->reservation = $reservation;
         return $this;
     }
 }

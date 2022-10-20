@@ -6,6 +6,7 @@ use App\Repository\IngredientGroupRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: IngredientGroupRepository::class)]
+#[ORM\Table(name: '`ingredient_groups`')]
 class IngredientGroup
 {
     #[ORM\Id]
