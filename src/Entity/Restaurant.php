@@ -8,6 +8,7 @@ use App\Repository\RestaurantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RestaurantRepository::class)]
 #[ORM\Table(name: '`restaurant`')]
@@ -17,12 +18,15 @@ class Restaurant extends AbstractEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['menu:read'])]
     private int $id;
 
     #[ORM\Column(type: 'string')]
+    #[Groups(['menu:read'])]
     private string $name;
 
     #[ORM\Column(type: 'string')]
+    #[Groups(['menu:read'])]
     private string $url;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Floor::class, orphanRemoval: true)]
@@ -30,6 +34,7 @@ class Restaurant extends AbstractEntity
     private Collection $floors;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['menu:read'])]
     private string $description;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Reservation::class)]

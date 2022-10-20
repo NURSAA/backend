@@ -3,31 +3,32 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\MenuRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
 #[ORM\Table(name: '`menus`')]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['menu:read'],
+    ]
+)]
 class Menu extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['menu:read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['menu:read'])]
     private string $name;
 
-    #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: Restaurant::class)]
+    #[ORM\ManyToOne(targetEntity: Restaurant::class)]
+    #[Groups(['menu:read'])]
     private Restaurant $restaurant;
-
-
-    public function __construct()
-    {
-        $this->restaurant = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -46,29 +47,14 @@ class Menu extends AbstractEntity
         return $this;
     }
 
-    public function getRestaurants(): Collection
+    public function getRestaurant(): Restaurant
     {
         return $this->restaurant;
     }
 
-    public function addRestaurants(Restaurant $restaurant): self
+    public function setRestaurant(Restaurant $restaurant): self
     {
-        if (!$this->$restaurant->contains($restaurant)) {
-            $this->$restaurant[] = $restaurant;
-            $restaurant->setIngredient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRestaurants(Restaurant $restaurant): self
-    {
-        if ($this->restaurant->removeElement($restaurant)) {
-            // set the owning side to null (unless already changed)
-            if ($restaurant->getName() === $this) {
-                $restaurant->setName(null);
-            }
-        }
+        $this->restaurant = $restaurant;
 
         return $this;
     }

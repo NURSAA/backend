@@ -2,6 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Repository\DishRepository;
+use Doctrine\ORM\Mapping as ORM;
+
 #[ORM\Entity(repositoryClass: DishRepository::class)]
 #[ORM\Table(name: '`dishes`')]
 #[ApiResource]
@@ -18,9 +23,6 @@ class Dish extends AbstractEntity
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
 
-    #[ORM\Column(type: 'File', nullable: true)]
-    private File $image;
-
     #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: Ingredient::class)]
     private Collection $ingredient;
 
@@ -29,6 +31,9 @@ class Dish extends AbstractEntity
 
     #[ORM\OneToMany(mappedBy: 'dishes', targetEntity: DishOrder::class)]
     private Collection $dishOrders;
+
+    #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist', 'remove'])]
+    private File $file;
 
     public function __construct()
     {
@@ -65,14 +70,14 @@ class Dish extends AbstractEntity
         $this->description = $description;
     }
 
-    public function getImage(): File
+    public function getFile(): ?File
     {
-        return $this->image;
+        return $this->file;
     }
 
-    public function setImage(File $image): self
+    public function setFile(?File $file): self
     {
-        $this->image = $image;
+        $this->file = $file;
 
         return $this;
     }
@@ -140,6 +145,4 @@ class Dish extends AbstractEntity
 
         return $this;
     }
-
-
 }
