@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RestaurantRepository::class)]
-#[ORM\Table(name: '`restaurant`')]
+#[ORM\Table(name: '`restaurants`')]
 #[ApiResource]
 class Restaurant extends AbstractEntity
 {
@@ -37,9 +37,13 @@ class Restaurant extends AbstractEntity
     #[Groups(['menu:read'])]
     private string $description;
 
+    #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Reservation::class)]
+    private $reservations;
+
     public function __construct()
     {
         $this->floors = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,6 +109,36 @@ class Restaurant extends AbstractEntity
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getRestaurant() === $this) {
+                $reservation->setRestaurant(null);
+            }
+        }
 
         return $this;
     }
