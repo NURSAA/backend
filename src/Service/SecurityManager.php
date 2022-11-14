@@ -18,6 +18,13 @@ class SecurityManager
 
     public function registerUser(string $email, string $password): User|null
     {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy([
+            'email' => $email
+        ]);
+        if ($user instanceof User) {
+            throw new \Exception("User already exists");
+        }
+
         $user = new User();
         $password = $this->passwordHasher->hashPassword($user, $password);
 
