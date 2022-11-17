@@ -29,11 +29,6 @@ abstract class AbstractNormalizer implements ContextAwareNormalizerInterface, No
     public function normalize(mixed $object, string $format = null, array $context = [])
     {
         $context['groups'] = [];
-//        if (true) {
-//            $exploded = explode("\\", $context['resource_class']);
-//            $context['groups'][] = $exploded[count($exploded) - 1];
-//        }
-
         $context[sprintf('%s_%s', $this->alreadyCalled, $context['resource_class'])] = true;
 
         $privilege = $this->em->getRepository(Privilege::class)->findOneBy([
@@ -42,7 +37,7 @@ abstract class AbstractNormalizer implements ContextAwareNormalizerInterface, No
         ]);
 
         if (!$privilege instanceof Privilege) {
-            return $this->normalizer->normalize(null, $format, ['skip_null_values' => true]);
+            return null;
         }
 
         if (null !== $groups = $privilege->getPrivilegeGroups()) {
