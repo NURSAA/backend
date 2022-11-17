@@ -44,9 +44,10 @@ abstract class AbstractNormalizer implements ContextAwareNormalizerInterface, No
             $context['groups'][] = $groups->map(function($group) {
                 return $group->getName();
             });
+            $this->normalizer->normalize($object, $format, $context);
         }
 
-        return $this->normalizer->normalize($object, $format, $context);
+        return null;
     }
 
     public function supportsNormalization($data, $format = null, array $context = []): bool
