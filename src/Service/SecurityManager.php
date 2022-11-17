@@ -30,7 +30,8 @@ class SecurityManager
 
         $user
             ->setEmail($email)
-            ->setPassword($password);
+            ->setPassword($password)
+            ->setRoles([User::ROLE_USER]);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

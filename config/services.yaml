@@ -25,6 +25,15 @@ services:
     App\OpenApi\JwtDecorator:
         decorates: 'api_platform.openapi.factory'
         arguments: [ '@.inner' ]
+
+    App\Serializer\UniversalNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 64 }
+
+#    App\Serializer\PrivilegeContextBuilder:
+#        decorates: 'api_platform.serializer.context_builder'
+#        autoconfigure: true
+
     acme_api.event.authentication_success_listener:
         class: App\EventListener\AuthenticationSuccessListener
         tags:

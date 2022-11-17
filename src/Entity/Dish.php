@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\DishRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DishRepository::class)]
 #[ORM\Table(name: '`dishes`')]
@@ -15,32 +15,32 @@ class Dish extends AbstractEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    #[Groups('menu_section:read')]
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups('menu_section:read')]
     private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups('menu_section:read')]
     private string $description;
 
-    #[ORM\OneToMany(mappedBy: 'Ingredient', targetEntity: Ingredient::class)]
-    private Collection $ingredient;
-
-    #[ORM\OneToMany(mappedBy: 'MenuSection', targetEntity: MenuSection::class)]
-    private Collection $section;
-
-    #[ORM\OneToMany(mappedBy: 'dishes', targetEntity: DishOrder::class)]
-    private Collection $dishOrders;
-
     #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist', 'remove'])]
+    #[Groups('menu_section:read')]
     private File $file;
 
-    public function __construct()
-    {
-        $this->ingredient = new ArrayCollection();
-        $this->section = new ArrayCollection();
-        $this->dishOrders = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(targetEntity: MenuSection::class, inversedBy: 'dishes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private MenuSection $menuSection;
+
+    #[ORM\Column(type: 'integer')]
+    #[Groups('menu_section:read')]
+    private ?int $dishOrder;
+
+    #[ORM\Column(type: 'integer')]
+    #[Groups('menu_section:read')]
+    private int $price;
 
     public function getId(): ?int
     {
@@ -82,66 +82,38 @@ class Dish extends AbstractEntity
         return $this;
     }
 
-    public function getIngredientGroup(): Collection
+    public function getMenuSection(): ?MenuSection
     {
-        return $this->ingredient;
+        return $this->menuSection;
     }
 
-    public function getDishOrders(): Collection
+    public function setMenuSection(?MenuSection $menuSection): self
     {
-        return $this->dishOrders;
-    }
-
-    public function setDishOrders(Collection $dishOrders): void
-    {
-        $this->dishOrders = $dishOrders;
-    }
-
-    public function addIngredientGroup(IngredientGroup $ingredient): self
-    {
-        if (!$this->ingredient->contains($ingredient)) {
-            $this->ingredient[] = $ingredient;
-            $ingredient->setIngredient($this);
-        }
+        $this->menuSection = $menuSection;
 
         return $this;
     }
 
-    public function removeIngredientGroup(IngredientGroup $ingredient): self
+    public function getDishOrder(): ?int
     {
-        if ($this->ingredient->removeElement($ingredient)) {
-            // set the owning side to null (unless already changed)
-            if ($ingredient->getIngredient() === $this) {
-                $ingredient->setIngredient(null);
-            }
-        }
+        return $this->dishOrder;
+    }
+
+    public function setDishOrder(int $dishOrder): self
+    {
+        $this->dishOrder = $dishOrder;
 
         return $this;
     }
 
-    public function getSection(): ArrayCollection|section
+    public function getPrice(): ?int
     {
-        return $this->section;
+        return $this->price;
     }
 
-    public function addSection(IngredientGroup $section): self
+    public function setPrice(int $price): self
     {
-        if (!$this->section->contains($section)) {
-            $this->section[] = $section;
-            $section->setIngredient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSection(IngredientGroup $section): self
-    {
-        if ($this->section->removeElement($section)) {
-            // set the owning side to null (unless already changed)
-            if ($section->getIngredient() === $this) {
-                $section->setIngredient(null);
-            }
-        }
+        $this->price = $price;
 
         return $this;
     }

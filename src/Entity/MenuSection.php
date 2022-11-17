@@ -3,39 +3,51 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Repository\MenuSectionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MenuSectionRepository::class)]
 #[ORM\Table(name: '`menu_sections`')]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['menu_section:read'],
+    ]
+)]
 class MenuSection extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    #[Groups('menu_section:read')]
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups('menu_section:read')]
     private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups('menu_section:read')]
     private string $description;
 
-    #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: Menu::class)]
+    #[ORM\Column(type: 'integer')]
+    #[Groups('menu_section:read')]
+    private int $sectionOrder;
+
+    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'menuSections')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('menu_section:read')]
     private Menu $menu;
 
-    #[ORM\OneToMany(mappedBy: 'ingredient', targetEntity: MenuSection::class)]
-    private MenuSection $parentSection;
-
-    #[ORM\Column(type: 'integer')]
-    private $order;
+    #[ORM\OneToMany(mappedBy: 'menuSection', targetEntity: Dish::class, orphanRemoval: true)]
+    #[Groups('menu_section:read')]
+    private $dishes;
 
     public function __construct()
     {
-        $this->menu = new ArrayCollection();
-        $this->parentSection = new ArrayCollection();
+        $this->dishes = new ArrayCollection();
     }
 
     public function getId()
@@ -64,67 +76,56 @@ class MenuSection extends AbstractEntity
         $this->description = $description;
     }
 
-    public function getParentSection(): ArrayCollection|parentSection
+    public function getSectionOrder(): int
     {
-        return $this->parentSection;
+        return $this->sectionOrder;
     }
 
-    public function addParentSection(Restaurant $parentSection): self
+    public function setSectionOrder($sectionOrder): void
     {
-        if (!$this->parentSection->contains($parentSection)) {
-            $this->parentSection[] = $parentSection;
-            $parentSection->setIngredient($this);
-        }
-
-        return $this;
+        $this->sectionOrder = $sectionOrder;
     }
 
-    public function removeParentSection(Restaurant $parentSection): self
-    {
-        if ($this->parentSection->removeElement($parentSection)) {
-            // set the owning side to null (unless already changed)
-            if ($parentSection->getName() === $this) {
-                $parentSection->setName(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getMenu(): ArrayCollection|menu
+    public function getMenu(): ?Menu
     {
         return $this->menu;
     }
 
-    public function addMenu(Restaurant $menu): self
+    public function setMenu(?Menu $menu): self
     {
-        if (!$this->menu->contains($menu)) {
-            $this->menu[] = $menu;
-            $menu->setIngredient($this);
+        $this->menu = $menu;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dish>
+     */
+    public function getDishes(): Collection
+    {
+        return $this->dishes;
+    }
+
+    public function addDish(Dish $dish): self
+    {
+        if (!$this->dishes->contains($dish)) {
+            $this->dishes[] = $dish;
+            $dish->setMenuSection($this);
         }
 
         return $this;
     }
 
-    public function removeMenu(Restaurant $menu): self
+    public function removeDish(Dish $dish): self
     {
-        if ($this->menu->removeElement($menu)) {
+        if ($this->dishes->removeElement($dish)) {
             // set the owning side to null (unless already changed)
-            if ($menu->getName() === $this) {
-                $menu->setName(null);
+            if ($dish->getMenuSection() === $this) {
+                $dish->setMenuSection(null);
             }
         }
 
         return $this;
     }
 
-    public function getOrder()
-    {
-        return $this->order;
-    }
-
-    public function setOrder($order): void
-    {
-        $this->order = $order;
-    }
 }

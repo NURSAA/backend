@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\Table(name: 'reservations')]
@@ -18,26 +19,32 @@ class Reservation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['Reservation:id', 'Restaurant:reservations'])]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['Reservation:user', 'Restaurant:reservations'])]
     private User $user;
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['Reservation:restaurant'])]
     private Restaurant $restaurant;
 
     #[ORM\OneToMany(mappedBy: 'tables', targetEntity: Table::class)]
     private Collection $tables;
 
     #[ORM\Column(type: 'date')]
-    private DateTimeImmutable $start;
+    #[Groups(['Reservation:start', 'Restaurant:reservations'])]
+    private DateTime $start;
 
     #[ORM\Column(type: 'date')]
-    private DateTimeImmutable $end;
+    #[Groups(['Reservation:start'])]
+    private DateTime $end;
 
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Order::class)]
+    #[Groups(['Reservation:orders'])]
     private Collection $orders;
 
     public function __construct()

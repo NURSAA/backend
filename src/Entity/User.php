@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\RegistrationController;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,6 +52,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Column(type: 'string')]
     #[Groups(['register'])]
     private string $password;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Privilege::class, cascade: ['remove'])]
+    private $privileges;
+
+    public function __construct()
+    {
+        $this->privileges = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -116,5 +126,35 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function eraseCredentials()
     {
         // Don't store password in plain text inside User object!
+    }
+
+    /**
+     * @return Collection<int, Privilege>
+     */
+    public function getPrivileges(): Collection
+    {
+        return $this->privileges;
+    }
+
+    public function addPrivilege(Privilege $privilege): self
+    {
+        if (!$this->privileges->contains($privilege)) {
+            $this->privileges[] = $privilege;
+            $privilege->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrivilege(Privilege $privilege): self
+    {
+        if ($this->privileges->removeElement($privilege)) {
+            // set the owning side to null (unless already changed)
+            if ($privilege->getUser() === $this) {
+                $privilege->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

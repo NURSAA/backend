@@ -5,9 +5,11 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\RestaurantRepository;
+use App\Serializer\UniversalNormalizer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: RestaurantRepository::class)]
@@ -18,26 +20,28 @@ class Restaurant extends AbstractEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['menu:read'])]
+    #[Groups(['Restaurant:id'])]
     private int $id;
 
     #[ORM\Column(type: 'string')]
-    #[Groups(['menu:read'])]
+    #[Groups(['Restaurant:name'])]
     private string $name;
 
     #[ORM\Column(type: 'string')]
-    #[Groups(['menu:read'])]
+    #[Groups(['Restaurant:url'])]
     private string $url;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Floor::class, orphanRemoval: true)]
     #[ApiSubresource]
+    #[Groups(['Restaurant:floors'])]
     private Collection $floors;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['menu:read'])]
+    #[Groups(['Restaurant:description'])]
     private string $description;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Reservation::class)]
+    #[Groups(['Restaurant:reservations'])]
     private $reservations;
 
     public function __construct()
