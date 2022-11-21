@@ -41,11 +41,10 @@ abstract class AbstractNormalizer implements ContextAwareNormalizerInterface, No
         }
 
         if (null !== $groups = $privilege->getPrivilegeGroups()) {
-            $context['groups'][] = $groups->map(function($group) {
+            $context['groups'] = array_map(function($group) {
                 return $group->getName();
-            });
+            }, $groups->toArray());
         }
-
         return $this->normalizer->normalize($object, $format, $context);
     }
 

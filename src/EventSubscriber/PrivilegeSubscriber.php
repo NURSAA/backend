@@ -4,7 +4,9 @@ namespace App\EventSubscriber;
 use ApiPlatform\Core\Api\IriConverterInterface;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Privilege;
+use App\Entity\PrivilegeGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -38,8 +40,19 @@ final class PrivilegeSubscriber implements EventSubscriberInterface
             $this->iriConverter->getIriFromItem($object),
             $this->security->getUser()
         );
-
         $this->em->persist($privilege);
+
+        $reflect = new ReflectionClass($object);
+        foreach ($reflect->getProperties() as $property) {
+
+            $privilegeGroup = new PrivilegeGroup(
+                $privilege,
+                sprintf('%s:%s', $reflect->getShortName(), $property->getName())
+            );
+            $this->em->persist($privilegeGroup);
+        }
+
+
         $this->em->flush();
     }
 

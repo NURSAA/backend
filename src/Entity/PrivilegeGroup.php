@@ -22,6 +22,14 @@ class PrivilegeGroup
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
+    public function __construct(
+        Privilege $privilege,
+        string $name
+    ) {
+        $this->privilege = $privilege;
+        $this->name = $name;
+    }
+
     public function getId(): string
     {
         return $this->id;
