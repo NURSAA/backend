@@ -3,9 +3,19 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Core\Api\IriConverterInterface;
 use ApiPlatform\Core\EventListener\EventPriorities;
-use App\Entity\Privilege;
-use App\Entity\PrivilegeGroup;
+use App\Entity\Dish;
+use App\Entity\DishOrder;
+use App\Entity\File;
+use App\Entity\Floor;
+use App\Entity\Ingredient;
+use App\Entity\IngredientGroup;
+use App\Entity\Menu;
+use App\Entity\MenuSection;
+use App\Entity\Ownership;
+use App\Entity\Restaurant;
+use App\Entity\Table;
 use Doctrine\ORM\EntityManagerInterface;
+use ProxyManager\ProxyGenerator\AccessInterceptorScopeLocalizer\MethodGenerator\BindProxyProperties;
 use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +25,17 @@ use Symfony\Component\Security\Core\Security;
 
 final class PrivilegeSubscriber implements EventSubscriberInterface
 {
+    private const CREATE_PRIVILEGES = [
+        Dish::class,
+        Floor::class,
+        IngredientGroup::class,
+        Ingredient::class,
+        MenuSection::class,
+        Menu::class,
+        Restaurant::class,
+        Table::class
+    ];
+
     public function __construct(
         private Security $security,
         private IriConverterInterface $iriConverter,
@@ -25,34 +46,50 @@ final class PrivilegeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['createOwnershipPrivilege', EventPriorities::POST_WRITE],
+            KernelEvents::VIEW => ['createPrivileges', EventPriorities::POST_WRITE],
         ];
     }
 
-    public function createOwnershipPrivilege(ViewEvent $event): void
+    public function createPrivileges(ViewEvent $event)
     {
-        if (Request::METHOD_POST !== $event->getRequest()->getMethod()) {
+        $this->createOwnershipPrivilege($event);
+//        $this->createPrivilegesOnRegistration($event);
+    }
+
+//    private function createPrivilegesOnRegistration(ViewEvent $event): void
+//    {
+//        if ($event->getRequest()->getRequestUri() !== '/api/register') {
+//            return;
+//        }
+//
+//        foreach (self::CREATE_PRIVILEGES as $privilegeClass) {
+//            $objects = $this->em->getRepository($privilegeClass)->findAll();
+//            foreach ($objects as $object) {
+//                $privilege = new Ownership(
+//                    $this->iriConverter->getIriFromItem($object),
+////                    $user
+//                );
+//            }
+//        }
+//
+//    }
+//
+    private function createOwnershipPrivilege(ViewEvent $event): void
+    {
+        $user = $this->security->getUser();
+        if (
+            null !== $user
+            && Request::METHOD_POST !== $event->getRequest()->getMethod()
+        ) {
             return;
         }
 
         $object = $event->getControllerResult();
-        $privilege = new Privilege(
+        $privilege = new Ownership(
             $this->iriConverter->getIriFromItem($object),
-            $this->security->getUser()
+            $user
         );
         $this->em->persist($privilege);
-
-        $reflect = new ReflectionClass($object);
-        foreach ($reflect->getProperties() as $property) {
-
-            $privilegeGroup = new PrivilegeGroup(
-                $privilege,
-                sprintf('%s:%s', $reflect->getShortName(), $property->getName())
-            );
-            $this->em->persist($privilegeGroup);
-        }
-
-
         $this->em->flush();
     }
 

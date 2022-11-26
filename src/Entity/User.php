@@ -53,7 +53,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[Groups(['register'])]
     private string $password;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Privilege::class, cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Ownership::class, cascade: ['remove'])]
     private $privileges;
 
     public function __construct()
@@ -129,14 +129,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     }
 
     /**
-     * @return Collection<int, Privilege>
+     * @return Collection<int, Ownership>
      */
     public function getPrivileges(): Collection
     {
         return $this->privileges;
     }
 
-    public function addPrivilege(Privilege $privilege): self
+    public function addPrivilege(Ownership $privilege): self
     {
         if (!$this->privileges->contains($privilege)) {
             $this->privileges[] = $privilege;
@@ -146,7 +146,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
-    public function removePrivilege(Privilege $privilege): self
+    public function removePrivilege(Ownership $privilege): self
     {
         if ($this->privileges->removeElement($privilege)) {
             // set the owning side to null (unless already changed)

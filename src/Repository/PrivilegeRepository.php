@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Privilege;
+use App\Entity\Ownership;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Privilege|null find($id, $lockMode = null, $lockVersion = null)
- * @method Privilege|null findOneBy(array $criteria, array $orderBy = null)
- * @method Privilege[]    findAll()
- * @method Privilege[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Ownership|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Ownership|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Ownership[]    findAll()
+ * @method Ownership[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PrivilegeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Privilege::class);
+        parent::__construct($registry, Ownership::class);
     }
 
     // /**
-    //  * @return Privilege[] Returns an array of Privilege objects
+    //  * @return Ownership[] Returns an array of Ownership objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class PrivilegeRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Privilege
+    public function findOneBySomeField($value): ?Ownership
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')
