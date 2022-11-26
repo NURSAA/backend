@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use App\Repository\IngredientGroupRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['ingredient_group:read'],
     ]
 )]
+#[ApiFilter(NumericFilter::class, properties: ['restaurant.id'])]
 class IngredientGroup
 {
     #[ORM\Id]

@@ -4,30 +4,36 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DishRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DishRepository::class)]
 #[ORM\Table(name: '`dishes`')]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['dish:read'],
+    ]
+)]
 class Dish extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups('menu_section:read')]
+    #[Groups(['dish:read', 'menu_section:read'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('menu_section:read')]
+    #[Groups(['dish:read', 'menu_section:read'])]
     private string $name;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('menu_section:read')]
+    #[Groups(['dish:read', 'menu_section:read'])]
     private string $description;
 
     #[ORM\OneToOne(targetEntity: File::class, cascade: ['persist', 'remove'])]
-    #[Groups('menu_section:read')]
+    #[Groups(['dish:read', 'menu_section:read'])]
     private File $file;
 
     #[ORM\ManyToOne(targetEntity: MenuSection::class, inversedBy: 'dishes')]
@@ -35,12 +41,21 @@ class Dish extends AbstractEntity
     private MenuSection $menuSection;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups('menu_section:read')]
+    #[Groups(['dish:read', 'menu_section:read'])]
     private ?int $dishOrder;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups('menu_section:read')]
+    #[Groups(['dish:read', 'menu_section:read'])]
     private int $price;
+
+    #[ORM\ManyToMany(targetEntity: Ingredient::class, inversedBy: 'dishes')]
+    #[Groups(['dish:read', 'menu_section:read'])]
+    private Collection $ingredients;
+
+    public function __construct()
+    {
+        $this->ingredients = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -114,6 +129,27 @@ class Dish extends AbstractEntity
     public function setPrice(int $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): self
+    {
+        $this->ingredients->removeElement($ingredient);
 
         return $this;
     }
