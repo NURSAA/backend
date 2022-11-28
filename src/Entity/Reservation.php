@@ -29,7 +29,7 @@ class Reservation
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['Reservation:restaurant'])]
+    #[Groups(['Reservation:restaurant', 'Restaurant:reservations'])]
     private Restaurant $restaurant;
 
     #[ORM\OneToMany(mappedBy: 'tables', targetEntity: Table::class)]
@@ -40,11 +40,11 @@ class Reservation
     private DateTime $start;
 
     #[ORM\Column(type: 'date')]
-    #[Groups(['Reservation:start'])]
+    #[Groups(['Reservation:start', 'Restaurant:reservations'])]
     private DateTime $end;
 
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Order::class)]
-    #[Groups(['Reservation:orders'])]
+    #[Groups(['Reservation:orders', 'Restaurant:reservations'])]
     private Collection $orders;
 
     public function __construct()

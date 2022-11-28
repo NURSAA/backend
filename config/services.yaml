@@ -26,7 +26,7 @@ services:
         decorates: 'api_platform.openapi.factory'
         arguments: [ '@.inner' ]
 
-    App\Serializer\UniversalNormalizer:
+    App\Serializer\PrivilegeNormalizer:
         tags:
             - { name: 'serializer.normalizer', priority: 64 }
 
