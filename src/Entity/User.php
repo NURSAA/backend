@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     collectionOperations: ['get'],
     itemOperations: [
         'get',
+        'put',
         'register' => [
             'method' => 'POST',
             'path' => '/register',
@@ -24,6 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
             'denormalization_context' => ['groups' => ['register']],
         ],
     ],
+    denormalizationContext: ['groups' => ['write']],
     normalizationContext: ['groups' => ['read']],
 )]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
@@ -44,7 +46,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     private string $email;
 
     #[ORM\Column(type: 'json')]
-    #[Groups(['read'])]
+    #[Groups(['read', 'write'])]
     private array $roles = [];
 
     #[ORM\Column(type: 'string')]
