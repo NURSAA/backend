@@ -18,23 +18,24 @@ class Restaurant extends AbstractEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['menu:read'])]
+    #[Groups(['menu:read', 'reservations:read'])]
     private int $id;
 
     #[ORM\Column(type: 'string')]
-    #[Groups(['menu:read'])]
+    #[Groups(['menu:read', 'reservations:read'])]
     private string $name;
 
     #[ORM\Column(type: 'string')]
-    #[Groups(['menu:read'])]
+    #[Groups(['menu:read', 'reservations:read'])]
     private string $url;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Floor::class, orphanRemoval: true)]
     #[ApiSubresource]
+    #[Groups(['reservations:read'])]
     private Collection $floors;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['menu:read'])]
+    #[Groups(['menu:read', 'reservations:read'])]
     private string $description;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Reservation::class)]

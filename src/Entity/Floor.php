@@ -21,7 +21,7 @@ class Floor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups('floor:read')]
+    #[Groups(['floor:read', 'reservations:read'])]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'floors')]
@@ -30,7 +30,7 @@ class Floor
     private Restaurant $restaurant;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups('floor:read')]
+    #[Groups(['floor:read', 'reservations:read'])]
     private int $level;
 
     #[ORM\OneToMany(mappedBy: 'floor', targetEntity: Table::class, orphanRemoval: true)]
@@ -38,7 +38,7 @@ class Floor
     private Collection $tables;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups('floor:read')]
+    #[Groups(['floor:read', 'reservations:read'])]
     private string $name;
 
     public function __construct()

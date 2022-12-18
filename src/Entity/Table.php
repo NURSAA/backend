@@ -30,10 +30,6 @@ class Table
     #[ORM\JoinColumn(nullable: false)]
     private Floor $floor;
 
-    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'tables')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Reservation $reservation;
-
     public function getId(): ?int
     {
         return $this->id;

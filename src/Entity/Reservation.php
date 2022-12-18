@@ -2,49 +2,47 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use App\Repository\ReservationRepository;
 use DateTime;
-use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ORM\Table(name: 'reservations')]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['reservations:read'],
+    ]
+)]
+#[ApiFilter(NumericFilter::class, properties: ['user.id'])]
 class Reservation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['reservations:read'])]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['reservations:read'])]
     private User $user;
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['reservations:read'])]
     private Restaurant $restaurant;
 
-    #[ORM\OneToMany(mappedBy: 'tables', targetEntity: Table::class)]
-    private Collection $tables;
+    #[ORM\Column(type: 'date')]
+    #[Groups(['reservations:read'])]
+    private DateTime $start;
 
     #[ORM\Column(type: 'date')]
-    private DateTimeImmutable $start;
-
-    #[ORM\Column(type: 'date')]
-    private DateTimeImmutable $end;
-
-    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Order::class)]
-    private Collection $orders;
-
-    public function __construct()
-    {
-        $this->tables = new ArrayCollection();
-        $this->orders = new ArrayCollection();
-    }
+    #[Groups(['reservations:read'])]
+    private DateTime $end;
 
     public function getId(): ?int
     {
@@ -75,87 +73,24 @@ class Reservation
         return $this;
     }
 
-    /**
-     * @return Collection<int, Table>
-     */
-    public function getTables(): Collection
-    {
-        return $this->tables;
-    }
-
-    public function addTable(Table $table): self
-    {
-        if (!$this->tables->contains($table)) {
-            $this->tables[] = $table;
-            $table->setReservations($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTable(Table $table): self
-    {
-        if ($this->tables->removeElement($table)) {
-            // set the owning side to null (unless already changed)
-            if ($table->getReservations() === $this) {
-                $table->setReservations(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getStart(): ?\DateTimeInterface
+    public function getStart(): DateTime
     {
         return $this->start;
     }
 
-    public function setStart(\DateTimeInterface $start): self
+    public function setStart(DateTime $start): void
     {
         $this->start = $start;
-
-        return $this;
     }
 
-    public function getEnd(): ?\DateTimeInterface
+    public function getEnd(): DateTime
     {
         return $this->end;
     }
 
-    public function setEnd(\DateTimeInterface $end): self
+    public function setEnd(DateTime $end): void
     {
         $this->end = $end;
-
-        return $this;
     }
 
-    /**
-     * @return Collection<int, Order>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setReservation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getReservation() === $this) {
-                $order->setReservation(null);
-            }
-        }
-
-        return $this;
-    }
 }
