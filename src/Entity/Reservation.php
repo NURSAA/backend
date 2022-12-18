@@ -7,6 +7,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use App\Repository\ReservationRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -43,6 +45,15 @@ class Reservation
     #[ORM\Column(type: 'date')]
     #[Groups(['reservations:read'])]
     private DateTime $end;
+
+    #[ORM\ManyToMany(targetEntity: Table::class, inversedBy: 'reservations')]
+    #[Groups(['reservations:read'])]
+    private Collection $tables;
+
+    public function __construct()
+    {
+        $this->tables = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -91,6 +102,30 @@ class Reservation
     public function setEnd(DateTime $end): void
     {
         $this->end = $end;
+    }
+
+    /**
+     * @return Collection<int, Table>
+     */
+    public function getTables(): Collection
+    {
+        return $this->tables;
+    }
+
+    public function addTable(Table $table): self
+    {
+        if (!$this->tables->contains($table)) {
+            $this->tables[] = $table;
+        }
+
+        return $this;
+    }
+
+    public function removeTable(Table $table): self
+    {
+        $this->tables->removeElement($table);
+
+        return $this;
     }
 
 }
