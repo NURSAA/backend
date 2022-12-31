@@ -38,15 +38,15 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['read'])]
+    #[Groups(['read', 'reservations:read'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Groups(['read', 'register'])]
+    #[Groups(['read', 'register', 'reservations:read'])]
     private string $email;
 
     #[ORM\Column(type: 'json')]
-    #[Groups(['read', 'write'])]
+    #[Groups(['read', 'write', 'reservations:read'])]
     private array $roles = [];
 
     #[ORM\Column(type: 'string')]
