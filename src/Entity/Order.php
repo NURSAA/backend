@@ -11,30 +11,35 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`orders`')]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: [
+        'groups' => ['order:read'],
+    ]
+)]
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private Reservation $reservation;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private string $status;
 
     #[ORM\OneToOne(inversedBy: 'orders', targetEntity: Payment::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private Payment $payment;
 
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: DishOrder::class)]
+    #[Groups(['order:read'])]
     private Collection $dishOrders;
 
     public function __construct()
