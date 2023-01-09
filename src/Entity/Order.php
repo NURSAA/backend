@@ -7,6 +7,7 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`orders`')]
@@ -16,17 +17,21 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['dish_order:read'])]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['dish_order:read'])]
     private Reservation $reservation;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['dish_order:read'])]
     private string $status;
 
     #[ORM\OneToOne(inversedBy: 'orders', targetEntity: Payment::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['dish_order:read'])]
     private Payment $payment;
 
     #[ORM\OneToMany(mappedBy: 'orders', targetEntity: DishOrder::class)]
