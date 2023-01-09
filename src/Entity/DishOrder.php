@@ -17,6 +17,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class DishOrder
 {
+    const STATUS_CREATED = 'created';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_COMPLETED = 'completed';
+
+    const DISH_ORDER_STATUSES = [
+        self::STATUS_CREATED,
+        self::STATUS_PROCESSING,
+        self::STATUS_COMPLETED,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
