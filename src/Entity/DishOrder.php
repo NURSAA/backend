@@ -5,8 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DishOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DishOrderRepository::class)]
 #[ORM\Table(name: 'dish_orders')]
@@ -39,6 +39,7 @@ class DishOrder
 
     #[ORM\Column(type: 'string')]
     #[Groups(['order:read'])]
+    #[Assert\Choice(choices: self::DISH_ORDER_STATUSES, message: 'Choose a valid dish order status.')]
     private string $status;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'dishOrders')]
