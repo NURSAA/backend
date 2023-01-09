@@ -34,7 +34,7 @@ class Order
     #[Groups(['dish_order:read'])]
     private Payment $payment;
 
-    #[ORM\OneToMany(mappedBy: 'orders', targetEntity: DishOrder::class)]
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: DishOrder::class)]
     private Collection $dishOrders;
 
     public function __construct()
