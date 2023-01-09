@@ -10,11 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DishOrderRepository::class)]
 #[ORM\Table(name: 'dish_orders')]
-#[ApiResource(
-    normalizationContext: [
-        'groups' => ['dish_order:read'],
-    ]
-)]
+#[ApiResource]
 class DishOrder
 {
     const STATUS_CREATED = 'created';
@@ -30,29 +26,28 @@ class DishOrder
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private string $details;
 
     #[ORM\Column(type: 'float')]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private float $price;
 
     #[ORM\Column(type: 'string')]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private string $status;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'dishOrders')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['dish_order:read'])]
     private Order $order;
 
     #[ORM\ManyToOne(targetEntity: Dish::class, inversedBy: 'dishOrders')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['dish_order:read'])]
+    #[Groups(['order:read'])]
     private Dish $dish;
 
     public function getId(): ?int
