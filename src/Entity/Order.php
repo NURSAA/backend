@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`orders`')]
@@ -18,6 +19,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class Order
 {
+    const STATUS_CREATED = 'created';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_COMPLETED = 'completed';
+
+    const ORDER_STATUSES = [
+        self::STATUS_CREATED,
+        self::STATUS_PROCESSING,
+        self::STATUS_COMPLETED,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -31,6 +42,7 @@ class Order
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['order:read'])]
+    #[Assert\Choice(choices: self::ORDER_STATUSES, message: 'Choose a valid order status.')]
     private string $status;
 
     #[ORM\OneToOne(inversedBy: 'orders', targetEntity: Payment::class)]
