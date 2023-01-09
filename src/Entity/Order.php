@@ -100,7 +100,7 @@ class Order
     {
         if (!$this->dishOrders->contains($dishOrder)) {
             $this->dishOrders[] = $dishOrder;
-            $dishOrder->setOrders($this);
+            $dishOrder->setOrder($this);
         }
 
         return $this;
@@ -110,8 +110,8 @@ class Order
     {
         if ($this->dishOrders->removeElement($dishOrder)) {
             // set the owning side to null (unless already changed)
-            if ($dishOrder->getOrders() === $this) {
-                $dishOrder->setOrders(null);
+            if ($dishOrder->getOrder() === $this) {
+                $dishOrder->setOrder(null);
             }
         }
 

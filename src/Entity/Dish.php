@@ -7,6 +7,7 @@ use App\Repository\DishRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DishRepository::class)]
@@ -40,9 +41,9 @@ class Dish extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private MenuSection $menuSection;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: DishOrder::class)]
     #[Groups(['dish:read', 'menu_section:read'])]
-    private ?int $dishOrder;
+    private Collection $dishOrders;
 
     #[ORM\Column(type: 'integer')]
     #[Groups(['dish:read', 'menu_section:read', 'order:read'])]
@@ -55,6 +56,7 @@ class Dish extends AbstractEntity
     public function __construct()
     {
         $this->ingredients = new ArrayCollection();
+        $this->dishOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,14 +111,32 @@ class Dish extends AbstractEntity
         return $this;
     }
 
-    public function getDishOrder(): ?int
+    /**
+     * @return Collection<int, DishOrder>
+     */
+    public function getDishOrders(): Collection
     {
-        return $this->dishOrder;
+        return $this->dishOrders;
     }
 
-    public function setDishOrder(int $dishOrder): self
+    public function addDishOrder(DishOrder $dishOrder): self
     {
-        $this->dishOrder = $dishOrder;
+        if (!$this->dishOrders->contains($dishOrder)) {
+            $this->dishOrders[] = $dishOrder;
+            $dishOrder->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDishOrder(DishOrder $dishOrder): self
+    {
+        if ($this->dishOrders->removeElement($dishOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($dishOrder->getOrder() === $this) {
+                $dishOrder->setOrder(null);
+            }
+        }
 
         return $this;
     }
