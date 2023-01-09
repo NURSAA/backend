@@ -86,26 +86,26 @@ class DishOrder
         return $this;
     }
 
-    public function getOrders(): ?Order
+    public function getOrder(): ?Order
     {
-        return $this->orders;
+        return $this->order;
     }
 
-    public function setOrders(?Order $orders): self
+    public function setOrder(?Order $order): self
     {
-        $this->orders = $orders;
+        $this->order = $order;
 
         return $this;
     }
 
-    public function getDishes(): Dish
+    public function getDish(): Dish
     {
-        return $this->dishes;
+        return $this->dish;
     }
 
-    public function setDishes(Dish $dishes): void
+    public function setDish(Dish $dish): void
     {
-        $this->dishes = $dishes;
+        $this->dish = $dish;
     }
 }
 
