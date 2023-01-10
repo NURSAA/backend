@@ -37,8 +37,10 @@ services:
         calls:
             - [ setAnnotationReader, [ '@annotation_reader' ] ]
 
-    App\EventListener\UserListener:
+    App\EventListener\DishOrderListener:
         tags:
             - name: doctrine.orm.entity_listener
               event: postUpdate
               entity: App\Entity\DishOrder
+
+    App\DataTransformer\CreateOrderDataTransformer: ~

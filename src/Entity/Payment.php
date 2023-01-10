@@ -33,11 +33,11 @@ class Payment
     private Order $order;
 
     #[ORM\Column(type: 'float')]
-    private float $amount;
+    private int $amount;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Choice(choices: self::PAYMENT_STATUSES, message: 'Choose a valid payment status')]
-    private string $status;
+    private string $status = self::STATUS_PENDING;
 
     public function __construct()
     {

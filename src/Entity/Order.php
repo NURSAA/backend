@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Dto\CreateOrderInput;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,9 +14,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`orders`')]
 #[ApiResource(
-    normalizationContext: [
-        'groups' => ['order:read'],
-    ]
+    collectionOperations: [
+        'get',
+        'create' => [
+            'method' => "POST",
+            'input' => CreateOrderInput::class,
+            'path' => '/order/create'
+        ],
+    ],
+    itemOperations: ['get'],
 )]
 class Order
 {
@@ -43,7 +50,7 @@ class Order
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['order:read'])]
     #[Assert\Choice(choices: self::ORDER_STATUSES, message: 'Choose a valid order status.')]
-    private string $status;
+    private string $status = self::STATUS_CREATED;
 
     #[ORM\OneToOne(inversedBy: 'order', targetEntity: Payment::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -53,6 +60,10 @@ class Order
     #[ORM\OneToMany(mappedBy: 'order', targetEntity: DishOrder::class)]
     #[Groups(['order:read'])]
     private Collection $dishOrders;
+
+    #[ORM\Column(type: 'integer')]
+    #[Groups(['order:read'])]
+    private int $amount;
 
     public function __construct()
     {
@@ -128,5 +139,15 @@ class Order
         }
 
         return $this;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(int $amount): void
+    {
+        $this->amount = $amount;
     }
 }
