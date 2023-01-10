@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'create' => [
             'method' => "POST",
             'input' => CreateOrderInput::class,
-            'path' => '/order/create'
+            'path' => '/orders/create'
         ],
     ],
     itemOperations: ['get'],
