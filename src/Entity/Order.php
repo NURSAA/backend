@@ -45,7 +45,7 @@ class Order
     #[Assert\Choice(choices: self::ORDER_STATUSES, message: 'Choose a valid order status.')]
     private string $status;
 
-    #[ORM\OneToOne(inversedBy: 'orders', targetEntity: Payment::class)]
+    #[ORM\OneToOne(inversedBy: 'order', targetEntity: Payment::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['order:read'])]
     private Payment $payment;
