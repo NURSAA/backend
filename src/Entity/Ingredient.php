@@ -17,15 +17,15 @@ class Ingredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['ingredient_group:read', 'menu_section:read'])]
+    #[Groups(['ingredient_group:read', 'menu_section:read', 'order:read'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['ingredient_group:read', 'menu_section:read'])]
+    #[Groups(['ingredient_group:read', 'menu_section:read', 'order:read'])]
     private string $name;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(['ingredient_group:read', 'menu_section:read'])]
+    #[Groups(['ingredient_group:read', 'menu_section:read', 'order:read'])]
     private int $price;
 
     #[ORM\ManyToOne(targetEntity: IngredientGroup::class, inversedBy: 'ingredients')]
