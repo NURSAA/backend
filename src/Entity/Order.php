@@ -23,6 +23,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         ],
     ],
     itemOperations: ['get'],
+    normalizationContext: [
+        'groups' => ['order:read'],
+    ]
 )]
 class Order
 {

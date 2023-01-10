@@ -39,7 +39,7 @@ class CreateOrderDataTransformer implements DataTransformerInterface
 
             $dishOrder = new DishOrder();
             $dishOrder->setOrder($order);
-            $dishOrder->setDetails($dishOrderDto->getDetails());
+            $dishOrder->setDetails($dishOrderDto->details);
             $dishOrder->setPrice($dish->getPrice());
             $dishOrder->setDish($dish);
 
@@ -54,9 +54,9 @@ class CreateOrderDataTransformer implements DataTransformerInterface
         $payment = new Payment();
         $payment->setOrder($order);
         $payment->setAmount($amount);
-
         $this->entityManager->persist($payment);
 
+        $order->setPayment($payment);
 //        $this->entityManager->flush();
         return $order;
     }
