@@ -3,17 +3,15 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Dto\CreateOrderInput;
-use App\EventListener\DishOrderListener;
 use App\Repository\DishOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-//use ApiPlatform\
+use ApiPlatform;
 
 #[ORM\Entity(repositoryClass: DishOrderRepository::class)]
 #[ORM\Table(name: 'dish_orders')]
-#[ApiResource(input: CreateOrderInput::class)]
+#[ApiResource]
 class DishOrder
 {
     const STATUS_CREATED = 'created';
