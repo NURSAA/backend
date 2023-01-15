@@ -41,7 +41,7 @@ class Dish extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private MenuSection $menuSection;
 
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: DishOrder::class)]
+    #[ORM\OneToMany(mappedBy: 'dish', targetEntity: DishOrder::class)]
     #[Groups(['dish:read', 'menu_section:read'])]
     private Collection $dishOrders;
 
