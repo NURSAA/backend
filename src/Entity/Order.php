@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use App\Dto\CreateOrderInput;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,6 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['order:read'],
     ]
 )]
+#[ApiFilter(NumericFilter::class, properties: ['reservation.id'])]
 class Order
 {
     const STATUS_CREATED = 'created';
