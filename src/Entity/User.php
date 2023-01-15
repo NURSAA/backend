@@ -45,13 +45,17 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[Groups(['read', 'register', 'reservations:read'])]
     private string $email;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: 'string')]
     #[Groups(['read', 'write', 'reservations:read'])]
-    private array $roles = [];
+    private string $role;
 
     #[ORM\Column(type: 'string')]
     #[Groups(['register'])]
     private string $password;
+
+    #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: true)]
+    private Restaurant $restaurant;
 
     public function getId(): ?int
     {
@@ -83,16 +87,14 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     /**
      * @see UserInterface
      */
-    public function getRoles(): array
+    public function getRole(): string
     {
-        $roles = $this->roles;
-
-        return array_unique($roles);
+        return $this->role;
     }
 
-    public function setRoles(array $roles): self
+    public function setRole(string $role): self
     {
-        $this->roles = $roles;
+        $this->role = $role;
  
         return $this;
     }
@@ -112,11 +114,23 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
+    public function getRestaurant(): Restaurant
+    {
+        return $this->restaurant;
+    }
+
+    public function setRestaurant(Restaurant $restaurant): void
+    {
+        $this->restaurant = $restaurant;
+    }
+
     public function eraseCredentials()
     {
-        // Don't store password in plain text inside User object!
+        return;
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->role];
     }
 }

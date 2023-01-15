@@ -10,8 +10,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UsersFixtures extends Fixture
 {
     const USER_CONFIG = [
-        ['admin', [User::ROLE_ADMIN]],
-        ['user', [User::ROLE_USER]]
+        ['admin', User::ROLE_ADMIN],
+        ['user', User::ROLE_USER],
     ];
 
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
@@ -29,11 +29,11 @@ class UsersFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createMockUser(string $name, array $roles): User
+    private function createMockUser(string $name, string $role): User
     {
         $user = (new User())
             ->setEmail(sprintf('%s@test.test', $name))
-            ->setRoles($roles);
+            ->setRole($role);
 
         $adminPassword = $this->passwordHasher->hashPassword($user, 'test');
         $user->setPassword($adminPassword);

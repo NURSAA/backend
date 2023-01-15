@@ -39,12 +39,16 @@ class Restaurant extends AbstractEntity
     private string $description;
 
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Reservation::class)]
-    private $reservations;
+    private Collection $reservations;
+
+    #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: User::class)]
+    private Collection $users;
 
     public function __construct()
     {
         $this->floors = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,4 +148,8 @@ class Restaurant extends AbstractEntity
         return $this;
     }
 
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
 }
