@@ -44,3 +44,4 @@ services:
               entity: App\Entity\DishOrder
 
     App\DataTransformer\CreateOrderDataTransformer: ~
+    App\DataTransformer\ChangeMenuStatusDataTransformer: ~
