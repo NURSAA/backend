@@ -28,7 +28,9 @@ class AuthenticationSuccessListener
         $data['@id'] = $this->iriConverter->getIriFromItem($user);
         $data['id'] = $user->getId();
         $data['email'] = $user->getEmail();
-        $data['roles'] = $user->getRole😝();
+        $data['role'] = $user->getRole();
+        $data['restaurant'] = $this->iriConverter->getIriFromItem($user->getRestaurant());
+
 
         $event->setData($data);
     }

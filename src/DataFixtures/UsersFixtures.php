@@ -12,6 +12,7 @@ class UsersFixtures extends Fixture
     const USER_CONFIG = [
         ['admin', User::ROLE_ADMIN],
         ['user', User::ROLE_USER],
+        ['cook', User::ROLE_COOK],
     ];
 
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
@@ -24,7 +25,6 @@ class UsersFixtures extends Fixture
             $admin = $this->createMockUser($userConfig[0], $userConfig[1]);
             $manager->persist($admin);
         }
-
 
         $manager->flush();
     }

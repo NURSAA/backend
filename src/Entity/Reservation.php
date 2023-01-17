@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['reservations:read'],
     ]
 )]
-#[ApiFilter(NumericFilter::class, properties: ['user.id'])]
+#[ApiFilter(NumericFilter::class, properties: ['user.id', 'restaurant.id'])]
 class Reservation
 {
     #[ORM\Id]

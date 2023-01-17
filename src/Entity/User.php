@@ -34,6 +34,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     const ROLE_USER = 'user';
     const ROLE_ADMIN = 'admin';
     const ROLE_SUPER_ADMIN = 'super_admin';
+    const ROLE_COOK = 'cook';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -55,7 +56,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
-    private Restaurant $restaurant;
+    private ?Restaurant $restaurant;
 
     public function getId(): ?int
     {
@@ -114,12 +115,12 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
         return $this;
     }
 
-    public function getRestaurant(): Restaurant
+    public function getRestaurant(): ?Restaurant
     {
         return $this->restaurant;
     }
 
-    public function setRestaurant(Restaurant $restaurant): void
+    public function setRestaurant(?Restaurant $restaurant): void
     {
         $this->restaurant = $restaurant;
     }
