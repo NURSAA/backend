@@ -152,4 +152,14 @@ class Restaurant extends AbstractEntity
     {
         return $this->users;
     }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->reservations->contains($user)) {
+            $this->users[] = $user;
+            $user->setRestaurant($this);
+        }
+
+        return $this;
+    }
 }

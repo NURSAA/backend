@@ -7,7 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UsersFixtures extends Fixture
+class UsersFixture extends Fixture
 {
     const USER_CONFIG = [
         ['admin', User::ROLE_ADMIN],
@@ -21,7 +21,7 @@ class UsersFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        foreach (UsersFixtures::USER_CONFIG as $userConfig) {
+        foreach (UsersFixture::USER_CONFIG as $userConfig) {
             $admin = $this->createMockUser($userConfig[0], $userConfig[1]);
             $manager->persist($admin);
         }
@@ -32,12 +32,17 @@ class UsersFixtures extends Fixture
     private function createMockUser(string $name, string $role): User
     {
         $user = (new User())
-            ->setEmail(sprintf('%s@test.test', $name))
+            ->setEmail($this->getMockEmail($name))
             ->setRole($role);
 
         $adminPassword = $this->passwordHasher->hashPassword($user, 'test');
         $user->setPassword($adminPassword);
 
         return $user;
+    }
+
+    public static function getMockEmail(string $name): string
+    {
+        return sprintf('%s@test.test', $name);
     }
 }
