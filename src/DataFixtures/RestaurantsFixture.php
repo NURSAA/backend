@@ -11,6 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 class RestaurantsFixture extends Fixture implements DependentFixtureInterface
 {
     const RESTAURANTS_COUNT = 10;
+    const COOK_RESTAURANT_INDEX = 1;
 
     public function load(ObjectManager $manager)
     {
@@ -34,7 +35,7 @@ class RestaurantsFixture extends Fixture implements DependentFixtureInterface
             'name' => sprintf('Restaurant %s', $index),
             'description' => sprintf('Restaurant %s description', $index),
             'url' => sprintf('www.restaurant-%s.com', $index),
-            'users' => [$index == 0 ? 'cook' : '']
+            'users' => [$index == RestaurantsFixture::COOK_RESTAURANT_INDEX ? 'cook' : '']
         ];
     }
 
@@ -46,7 +47,6 @@ class RestaurantsFixture extends Fixture implements DependentFixtureInterface
         foreach ($users as $username) {
             $user = $manager->getRepository(User::class)
                 ->findOneBy(['email' => UsersFixture::getMockEmail($username)]);
-
             if ($user) {
                 $restaurant->addUser($user);
             }
