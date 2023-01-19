@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Menu;
+use App\Entity\MenuSection;
 use App\Entity\Restaurant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -19,11 +20,26 @@ class MenusFixture extends Fixture implements DependentFixtureInterface
             $menu->setName(sprintf('Menu - %s', $restaurant->getName()));
             $menu->setRestaurant($restaurant);
             $menu->setStatus(Menu::STATUS_ACTIVE);
-
             $manager->persist($menu);
+
+            $menuSection = $this->createMenuSection($restaurant, $menu);
+            $manager->persist($menuSection);
         }
 
         $manager->flush();
+    }
+
+    private function createMenuSection(
+        Restaurant $restaurant,
+        Menu $menu,
+    ): MenuSection {
+        $menuSection = new MenuSection();
+        $menuSection->setName(sprintf('Menu section - %s', $restaurant->getName()));
+        $menuSection->setDescription(sprintf('Menu section description - %s', $restaurant->getName()));
+        $menuSection->setSectionOrder(1);
+        $menuSection->setMenu($menu);
+
+        return $menuSection;
     }
 
 
