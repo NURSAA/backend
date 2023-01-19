@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use App\Filter\ReservationCompletedFilter;
 use App\Repository\ReservationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +21,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['reservations:read'],
     ]
 )]
-#[ApiFilter(NumericFilter::class, properties: ['user.id', 'restaurant.id'])]
+//#[ApiFilter(NumericFilter::class, properties: ['user.id', 'restaurant.id'])]
+#[ApiFilter(ReservationCompletedFilter::class, properties: ['completed'])]
 class Reservation
 {
     #[ORM\Id]
@@ -50,9 +53,14 @@ class Reservation
     #[Groups(['reservations:read'])]
     private Collection $tables;
 
+    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Order::class)]
+    #[Groups(['order:read'])]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->tables = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -63,6 +71,20 @@ class Reservation
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    #[Groups(['reservations:read'])]
+    public function isCompleted(): bool
+    {
+        /** @var Order $order */
+        foreach ($this->orders as $order) {
+            foreach ($order->getDishOrders() as $dishOrder) {
+                if ($dishOrder->getStatus() !== DishOrder::STATUS_COMPLETED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public function setUser(?User $user): self
@@ -128,4 +150,8 @@ class Reservation
         return $this;
     }
 
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
 }

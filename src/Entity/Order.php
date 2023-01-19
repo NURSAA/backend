@@ -48,7 +48,7 @@ class Order
     #[Groups(['order:read'])]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Reservation::class)]
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'orders')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['order:read'])]
     private Reservation $reservation;
