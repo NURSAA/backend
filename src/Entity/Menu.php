@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Dto\SetMenuActiveInput;
 use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,6 +32,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         'groups' => ['menu:read'],
     ]
 )]
+#[ApiFilter(NumericFilter::class, properties: ['restaurant.id'])]
+#[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
 class Menu extends AbstractEntity
 {
     const STATUS_ACTIVE = 'active';
