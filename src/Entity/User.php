@@ -56,6 +56,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['read', 'write'])]
     private ?Restaurant $restaurant;
 
     public function getId(): ?int
