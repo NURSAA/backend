@@ -52,7 +52,7 @@ class Reservation
     private Collection $tables;
 
     #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: Order::class)]
-    #[Groups(['order:read'])]
+    #[Groups(['reservations:read'])]
     private Collection $orders;
 
     public function __construct()
