@@ -5,8 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
-use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
-use App\Filter\ReservationCompletedFilter;
 use App\Repository\ReservationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,8 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['reservations:read'],
     ]
 )]
-//#[ApiFilter(NumericFilter::class, properties: ['user.id', 'restaurant.id'])]
-#[ApiFilter(ReservationCompletedFilter::class, properties: ['completed'])]
+#[ApiFilter(NumericFilter::class, properties: ['user.id', 'restaurant.id'])]
+//#[ApiFilter(ReservationCompletedFilter::class, properties: ['completed'])]
 class Reservation
 {
     #[ORM\Id]
