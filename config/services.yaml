@@ -45,3 +45,6 @@ services:
 
     App\DataTransformer\CreateOrderDataTransformer: ~
     App\DataTransformer\ChangeMenuStatusDataTransformer: ~
+    App\DataPersister\EntityPersister:
+        bind:
+            $decorated: '@api_platform.doctrine.orm.data_persister'

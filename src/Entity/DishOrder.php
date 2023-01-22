@@ -12,7 +12,7 @@ use ApiPlatform;
 #[ORM\Entity(repositoryClass: DishOrderRepository::class)]
 #[ORM\Table(name: 'dish_orders')]
 #[ApiResource]
-class DishOrder
+class DishOrder extends AbstractEntity
 {
     const STATUS_CREATED = 'created';
     const STATUS_PROCESSING = 'processing';
@@ -41,7 +41,7 @@ class DishOrder
     #[ORM\Column(type: 'string')]
     #[Groups(['order:read'])]
     #[Assert\Choice(choices: self::DISH_ORDER_STATUSES, message: 'Choose a valid dish order status.')]
-    private string $status = self::STATUS_CREATED;
+    protected string $status = self::STATUS_CREATED;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'dishOrders')]
     #[ORM\JoinColumn(nullable: false)]

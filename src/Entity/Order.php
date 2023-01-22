@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(NumericFilter::class, properties: ['reservation.id'])]
-class Order
+class Order extends AbstractEntity
 {
     const STATUS_CREATED = 'created';
     const STATUS_PROCESSING = 'processing';
@@ -56,7 +56,7 @@ class Order
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['order:read'])]
     #[Assert\Choice(choices: self::ORDER_STATUSES, message: 'Choose a valid order status.')]
-    private string $status = self::STATUS_CREATED;
+    protected string $status = self::STATUS_CREATED;
 
     #[ORM\OneToOne(inversedBy: 'order', targetEntity: Payment::class)]
     #[ORM\JoinColumn(nullable: false)]
