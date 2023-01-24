@@ -22,11 +22,11 @@ abstract class AbstractEntity
     protected DateTime $updated;
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['order:read'])]
-    protected string $status = self::STATUS_DEFAULT;
+    protected string $deletedStatus = self::STATUS_DEFAULT;
 
-    public function setStatus(string $status): self
+    public function setDeletedStatus(string $deletedStatus): self
     {
-        $this->status = $status;
+        $this->deletedStatus = $deletedStatus;
         return $this;
     }
 }

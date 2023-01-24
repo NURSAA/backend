@@ -136,5 +136,7 @@ class Menu extends AbstractEntity
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
     }
 }
