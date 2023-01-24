@@ -64,7 +64,7 @@ class Menu extends AbstractEntity
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['menu:read'])]
     #[Assert\Choice(choices: self::MENU_STATUSES, message: 'Choose a valid menu status.')]
-    private string $status;
+    protected string $status;
 
     public function __construct()
     {
@@ -133,7 +133,7 @@ class Menu extends AbstractEntity
     {
         return $this->status;
     }
-    public function setStatus(string $status): void
+    public function setStatus(string $status): self
     {
         $this->status = $status;
     }

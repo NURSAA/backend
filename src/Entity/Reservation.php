@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[ApiFilter(NumericFilter::class, properties: ['user.id', 'restaurant.id'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'])]
-class Reservation
+class Reservation extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

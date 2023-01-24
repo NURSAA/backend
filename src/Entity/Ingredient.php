@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
 #[ORM\Table(name: '`ingredients`')]
 #[ApiResource]
-class Ingredient
+class Ingredient extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

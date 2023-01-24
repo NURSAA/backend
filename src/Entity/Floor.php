@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['floor:read'],
     ]
 )]
-class Floor
+class Floor extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

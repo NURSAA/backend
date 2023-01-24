@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Table(name: '`tables`')]
 #[ApiResource]
 #[ApiFilter(NumericFilter::class, properties: ['floor.restaurant.id'])]
-class Table
+class Table extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

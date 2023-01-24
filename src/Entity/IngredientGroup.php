@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ]
 )]
 #[ApiFilter(NumericFilter::class, properties: ['restaurant.id'])]
-class IngredientGroup
+class IngredientGroup extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
