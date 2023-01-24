@@ -16,7 +16,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class ReservationsFixture extends Fixture implements DependentFixtureInterface
 {
-    const RESERVATIONS_COUNT = 5;
+    const RESERVATIONS_COUNT = 20;
     public function load(ObjectManager $manager)
     {
         $user = $manager->getRepository(User::class)->findOneBy(['email' => UsersFixture::getMockEmail('user')]);
