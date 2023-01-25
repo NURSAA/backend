@@ -21,6 +21,7 @@ class RestaurantsFixture extends Fixture implements DependentFixtureInterface
             $restaurant->setName($restaurantConfig['name']);
             $restaurant->setDescription($restaurantConfig['description']);
             $restaurant->setUrl($restaurantConfig['url']);
+            $restaurant->setAddress($restaurantConfig['address']);
             $this->addUsers($restaurantConfig['users'], $restaurant, $manager);
 
             $manager->persist($restaurant);
@@ -35,6 +36,7 @@ class RestaurantsFixture extends Fixture implements DependentFixtureInterface
             'name' => sprintf('Restaurant %s', $index),
             'description' => sprintf('Restaurant %s description', $index),
             'url' => sprintf('www.restaurant-%s.com', $index),
+            'address' => sprintf('Nice street %s, 00-000', $index),
             'users' => [$index == RestaurantsFixture::COOK_RESTAURANT_INDEX ? 'cook' : '']
         ];
     }
