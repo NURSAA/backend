@@ -46,6 +46,18 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[Groups(['read', 'register', 'reservations:read'])]
     private string $email;
 
+    #[ORM\Column(type: 'string', length: 180)]
+    #[Groups(['read', 'write', 'register', 'reservations:read'])]
+    private string $firstName;
+
+    #[ORM\Column(type: 'string', length: 180)]
+    #[Groups(['read', 'write', 'register', 'reservations:read'])]
+    private string $lastName;
+
+    #[ORM\Column(type: 'string', length: 20)]
+    #[Groups(['read', 'write', 'register', 'reservations:read'])]
+    private string $phone;
+
     #[ORM\Column(type: 'string')]
     #[Groups(['read', 'write', 'reservations:read'])]
     private string $role;
@@ -134,5 +146,40 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     public function getRoles(): array
     {
         return [$this->role];
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): User
+    {
+        $this->phone = $phone;
+        return $this;
     }
 }

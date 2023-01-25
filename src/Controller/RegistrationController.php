@@ -21,6 +21,12 @@ class RegistrationController extends AbstractController
     public function __invoke(Request $request): User
     {
         $content = json_decode($request->getContent(), true);
-        return $this->securityManager->registerUser($content['email'], $content['password']);
+        return $this->securityManager->registerUser(
+            $content['email'],
+            $content['firstName'],
+            $content['lastName'],
+            $content['phone'],
+            $content['password']
+        );
     }
 }
