@@ -33,6 +33,9 @@ class UsersFixture extends Fixture
     {
         $user = (new User())
             ->setEmail($this->getMockEmail($name))
+            ->setFirstName(sprintf('First %s', $name))
+            ->setLastName(sprintf('Last %s', $name))
+            ->setPhone('123456')
             ->setRole($role);
 
         $adminPassword = $this->passwordHasher->hashPassword($user, 'test');

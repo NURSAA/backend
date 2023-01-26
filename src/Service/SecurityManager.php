@@ -16,13 +16,21 @@ class SecurityManager
         private UserPasswordHasherInterface $passwordHasher
     ) {}
 
-    public function registerUser(string $email, string $password): User|null
-    {
+    public function registerUser(
+        string $email,
+        string $firstName,
+        string $lastName,
+        string $phone,
+        string $password
+    ): User | null {
         $user = new User();
         $password = $this->passwordHasher->hashPassword($user, $password);
 
         $user
             ->setEmail($email)
+            ->setFirstName($firstName)
+            ->setLastName($lastName)
+            ->setPhone($phone)
             ->setPassword($password)
             ->setRole(User::ROLE_USER);
 

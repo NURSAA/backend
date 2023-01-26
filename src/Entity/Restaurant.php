@@ -29,6 +29,10 @@ class Restaurant extends AbstractEntity
     #[Groups(['menu:read', 'reservations:read'])]
     private string $url;
 
+    #[ORM\Column(type: 'string')]
+    #[Groups(['menu:read', 'reservations:read'])]
+    private string $address;
+
     #[ORM\OneToMany(mappedBy: 'restaurant', targetEntity: Floor::class, orphanRemoval: true)]
     #[ApiSubresource]
     #[Groups(['reservations:read'])]
@@ -159,6 +163,18 @@ class Restaurant extends AbstractEntity
             $this->users[] = $user;
             $user->setRestaurant($this);
         }
+
+        return $this;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
