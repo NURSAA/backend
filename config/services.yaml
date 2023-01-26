@@ -48,3 +48,11 @@ services:
     App\DataPersister\EntityPersister:
         bind:
             $decorated: '@api_platform.doctrine.orm.data_persister'
+
+    before_request_listener:
+        class: App\EventListener\BeforeRequestListener
+        arguments: [ "@doctrine.orm.entity_manager" ]
+        tags:
+            - name: kernel.event_listener
+              event: kernel.request
+              method: onKernelRequest
