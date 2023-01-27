@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
@@ -30,11 +32,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
     const ROLE_USER = 'user';
     const ROLE_ADMIN = 'admin';
-    const ROLE_SUPER_ADMIN = 'super_admin';
     const ROLE_COOK = 'cook';
+
+    const USER_ORDER_STATUSES = [
+        self::ROLE_USER,
+        self::ROLE_ADMIN,
+        self::ROLE_COOK,
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -60,6 +66,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[ORM\Column(type: 'string')]
     #[Groups(['read', 'write', 'reservations:read'])]
+    #[Assert\Choice(choices: self::USER_ORDER_STATUSES, message: 'Choose a valid user role.')]
     private string $role;
 
     #[ORM\Column(type: 'string')]
