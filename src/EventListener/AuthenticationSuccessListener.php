@@ -3,7 +3,6 @@
 namespace App\EventListener;
 
 use ApiPlatform\Core\Api\IriConverterInterface;
-use ApiPlatform\Core\Bridge\Symfony\Routing\IriConverter;
 use App\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,7 +16,7 @@ class AuthenticationSuccessListener
         $this->iriConverter = $iriConverter;
     }
 
-    public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
+    public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event) : void
     {
         $data = $event->getData();
         /** @var User $user */
