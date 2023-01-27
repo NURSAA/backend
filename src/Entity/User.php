@@ -27,8 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             'denormalization_context' => ['groups' => ['register']],
         ],
     ],
-    denormalizationContext: ['groups' => ['write']],
-    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['user:write']],
+    normalizationContext: ['groups' => ['user:read']],
 )]
 class User extends AbstractEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -45,27 +45,27 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['read', 'reservations:read'])]
+    #[Groups(['user:read', 'reservations:read'])]
     private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Groups(['read', 'register', 'reservations:read'])]
+    #[Groups(['user:read', 'register', 'reservations:read'])]
     private string $email;
 
     #[ORM\Column(type: 'string', length: 180)]
-    #[Groups(['read', 'write', 'register', 'reservations:read'])]
+    #[Groups(['user:read', 'user:write', 'register', 'reservations:read'])]
     private string $firstName;
 
     #[ORM\Column(type: 'string', length: 180)]
-    #[Groups(['read', 'write', 'register', 'reservations:read'])]
+    #[Groups(['user:read', 'user:write', 'register', 'reservations:read'])]
     private string $lastName;
 
     #[ORM\Column(type: 'string', length: 20)]
-    #[Groups(['read', 'write', 'register', 'reservations:read'])]
+    #[Groups(['user:read', 'user:write', 'register', 'reservations:read'])]
     private string $phone;
 
     #[ORM\Column(type: 'string')]
-    #[Groups(['read', 'write', 'reservations:read'])]
+    #[Groups(['user:read', 'user:write', 'reservations:read'])]
     #[Assert\Choice(choices: self::USER_ORDER_STATUSES, message: 'Choose a valid user role.')]
     private string $role;
 
@@ -75,7 +75,7 @@ class User extends AbstractEntity implements UserInterface, PasswordAuthenticate
 
     #[ORM\ManyToOne(targetEntity: Restaurant::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['user:read', 'user:write'])]
     private ?Restaurant $restaurant;
 
     public function getId(): ?int
