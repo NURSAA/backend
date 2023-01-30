@@ -70,9 +70,6 @@ class Restaurant extends AbstractEntity
         $this->name = $name;
     }
 
-    /**
-     * @return Collection<int, Floor>
-     */
     public function getFloors(): Collection
     {
         return $this->floors;
@@ -91,7 +88,6 @@ class Restaurant extends AbstractEntity
     public function removeFloor(Floor $floor): self
     {
         if ($this->floors->removeElement($floor)) {
-            // set the owning side to null (unless already changed)
             if ($floor->getRestaurant() === $this) {
                 $floor->setRestaurant(null);
             }
@@ -122,9 +118,6 @@ class Restaurant extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @return Collection<int, Reservation>
-     */
     public function getReservations(): Collection
     {
         return $this->reservations;
@@ -143,7 +136,6 @@ class Restaurant extends AbstractEntity
     public function removeReservation(Reservation $reservation): self
     {
         if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
             if ($reservation->getRestaurant() === $this) {
                 $reservation->setRestaurant(null);
             }

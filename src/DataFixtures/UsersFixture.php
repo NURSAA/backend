@@ -14,6 +14,8 @@ class UsersFixture extends Fixture
         ['user', User::ROLE_USER],
         ['cook', User::ROLE_COOK],
     ];
+    const FIXTURE_USER_PASSWORD = 'test';
+    const MAIL_SUFFIX = 'test.test';
 
     public function __construct(private UserPasswordHasherInterface $passwordHasher)
     {
@@ -38,14 +40,14 @@ class UsersFixture extends Fixture
             ->setPhone('123456')
             ->setRole($role);
 
-        $adminPassword = $this->passwordHasher->hashPassword($user, 'test');
-        $user->setPassword($adminPassword);
+        $userPassword = $this->passwordHasher->hashPassword($user, UsersFixture::FIXTURE_USER_PASSWORD);
+        $user->setPassword($userPassword);
 
         return $user;
     }
 
     public static function getMockEmail(string $name): string
     {
-        return sprintf('%s@test.test', $name);
+        return sprintf('%s@%s', $name, UsersFixture::MAIL_SUFFIX);
     }
 }
