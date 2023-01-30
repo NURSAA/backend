@@ -43,6 +43,7 @@ class Menu extends AbstractEntity
         self::STATUS_ACTIVE,
         self::STATUS_INACTIVE,
     ];
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]

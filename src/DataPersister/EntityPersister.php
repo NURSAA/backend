@@ -27,11 +27,12 @@ class EntityPersister implements ContextAwareDataPersisterInterface,
 
     public function remove($data, array $context = []): void
     {
-        $this->decorated->remove($data, $context);
+        $data->setSoftDeleted(true);
+//        $this->decorated->remove($data, $context);
     }
 
     public function resumable(array $context = []): bool
     {
-        return true;
+        return false;
     }
 }
