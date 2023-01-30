@@ -19,7 +19,7 @@ abstract class AbstractEntity
     #[Gedmo\Timestampable]
     protected DateTime $updated;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'boolean', length: 255)]
     #[Groups(['order:read'])]
     protected bool $softDelete = false;
 

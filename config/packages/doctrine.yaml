@@ -18,6 +18,8 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        filters:
+            hide_soft_deleted_entities: App\Doctrine\SoftDeleteFilter
 
 when@test:
     doctrine:
