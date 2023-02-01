@@ -20,14 +20,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     collectionOperations: [
         'get',
-    ],
-    itemOperations: [
-        'get',
         'set_active' => [
-            'method' => "PUT",
+            'method' => "POST",
             'input' => SetMenuActiveInput::class,
             'path' => '/menu/set-active'
         ],
+    ],
+    itemOperations: [
+        'get'
     ],
     normalizationContext: [
         'groups' => ['menu:read'],
