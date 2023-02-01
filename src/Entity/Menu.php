@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Doctrine\HideSoftDeleteInterface;
 use App\Dto\SetMenuActiveInput;
 use App\Repository\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,7 +35,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(NumericFilter::class, properties: ['restaurant.id'])]
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
-class Menu extends AbstractEntity
+class Menu extends AbstractEntity implements HideSoftDeleteInterface
 {
     const STATUS_ACTIVE = 'active';
     const STATUS_INACTIVE = 'inactive';

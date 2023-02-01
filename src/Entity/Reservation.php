@@ -5,7 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\NumericFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\ReservationRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,7 +20,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ]
 )]
 #[ApiFilter(NumericFilter::class, properties: ['user.id', 'restaurant.id'])]
-#[ApiFilter(OrderFilter::class, properties: ['id'])]
 class Reservation extends AbstractEntity
 {
     #[ORM\Id]
