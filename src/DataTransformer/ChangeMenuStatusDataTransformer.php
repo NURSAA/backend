@@ -28,7 +28,6 @@ class ChangeMenuStatusDataTransformer implements DataTransformerInterface
     {
         /** @var Menu $menu */
         $menu = $this->iriConverter->getItemFromIri($data->menuIri);
-        $restaurant = $this->iriConverter->getItemFromIri($data->restaurantIri);
 
         $this->entityManager->getRepository(Menu::class)
             ->createQueryBuilder('m')
@@ -37,7 +36,7 @@ class ChangeMenuStatusDataTransformer implements DataTransformerInterface
             ->andWhere('m.restaurant = :restaurant')
             ->setParameters([
                 'status' => Menu::STATUS_INACTIVE,
-                'restaurant' => $restaurant->getId(),
+                'restaurant' => $menu->getRestaurant(),
             ])
             ->getQuery()->execute();
 
