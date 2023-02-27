@@ -32,7 +32,7 @@ class CreateOrderDataTransformer implements DataTransformerInterface
             /** @var Dish $dish */
             $dish = $this->iriConverter->getItemFromIri($dishOrderDto->dishIri);
             if ($dish->getMenuSection()->getMenu()->getRestaurant()->getId() !== $reservation->getRestaurant()->getId()) {
-                throw new Exception("jeblo sie");
+                throw new Exception("Dish does not belong to this restaurant");
             }
 
             $dishOrder = new DishOrder();
