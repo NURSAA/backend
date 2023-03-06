@@ -25,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             'input' => SetMenuActiveInput::class,
             'path' => '/menu/set-active'
         ],
+        'post'
     ],
     itemOperations: [
         'get'
@@ -66,7 +67,7 @@ class Menu extends AbstractEntity implements HideSoftDeleteInterface
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['menu:read'])]
     #[Assert\Choice(choices: self::MENU_STATUSES, message: 'Choose a valid menu status.')]
-    protected string $status;
+    protected string $status = self::STATUS_INACTIVE;
 
     public function __construct()
     {
